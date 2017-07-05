@@ -1,8 +1,7 @@
 #!/bin/bash
-docker build -t redmoo/sample-node .
 docker push redmoo/sample-node
 
-ssh deploy@docean.admin << EOF
+ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /home/sam/.ssh/circleci deploy@138.68.68.192 << EOF
 docker pull redmoo/sample-node:latest
 docker stop web || true
 docker rm web || true
