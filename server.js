@@ -2,7 +2,7 @@ var express = require("express");
 
 express()
  .get("*", function(req, res) {
-    res.send("this is staging.");
+    res.send("this is qa environment.");
  })
  .listen(3000, function(err) {
     if (err) {
