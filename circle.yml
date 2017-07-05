@@ -4,7 +4,9 @@ machine:
 
 dependencies:
   override:
-    - docker build -t redmoo/sample-node .
+    - if [[ "$CIRCLE_BRANCH" == staging ]]; then docker build -f Dockerfile.staging -t redmoo/sample-node .; fi;
+    - if [[ "$CIRCLE_BRANCH" == qa ]]; then docker build -f Dockerfile.qa -t redmoo/sample-node .; fi;
+    - if [[ "$CIRCLE_BRANCH" != qa ]] && [[ "$CIRCLE_BRANCH" != staging ]]; then docker build -t redmoo/sample-node .; fi;
 
 test:
   override:
@@ -16,3 +18,15 @@ deployment:
     commands:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - ./deploy.sh
+  staging:
+    branch: staging
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker tag redmoo/sample-node:latest redmoo/sample-node:staging
+      - ./deploy.staging.sh
+  qa:
+    branch: qa
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker tag redmoo/sample-node:latest redmoo/sample-node:qa
+      - ./deploy.qa.sh
