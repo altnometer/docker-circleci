@@ -2,7 +2,7 @@ var express = require("express");
 
 express()
  .get("*", function(req, res) {
-    res.send("ok");
+    res.send("this is staging.");
  })
  .listen(3000, function(err) {
     if (err) {
